@@ -1,18 +1,18 @@
-/* global google */
+/*global google*/
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 import moment from "moment";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import cuid from "cuid";
 import Script from "react-load-script";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import {
   composeValidators,
   combineValidators,
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
-import cuid from "cuid";
-import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { createEvent, updateEvent } from "../eventActions";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
@@ -38,6 +38,7 @@ const actions = {
   createEvent,
   updateEvent
 };
+
 const category = [
   { key: "drinks", text: "Drinks", value: "drinks" },
   { key: "culture", text: "Culture", value: "culture" },
@@ -68,7 +69,7 @@ class EventForm extends Component {
     scriptLoaded: false
   };
 
-  handleScriptLoad = () => this.setState({ scriptLoaded: true });
+  handleScriptLoaded = () => this.setState({ scriptLoaded: true });
 
   handleCitySelect = selectedCity => {
     geocodeByAddress(selectedCity)
@@ -82,8 +83,6 @@ class EventForm extends Component {
         this.props.change("city", selectedCity);
       });
   };
-
-
 
   handleVenueSelect = selectedVenue => {
     geocodeByAddress(selectedVenue)
@@ -121,8 +120,8 @@ class EventForm extends Component {
     return (
       <Grid>
         <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3XqZTgaHxzZGoBcQ4ubeJ_4pKNB3vAwg&libraries=places"
-          onLoad={this.handleScriptLoad}
+          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmVjh6n5R3TfFIder31hulGWhyqHFxHuk &libraries=places"
+          onLoad={this.handleScriptLoaded}
         />
         <Grid.Column width={10}>
           <Segment>
@@ -144,30 +143,30 @@ class EventForm extends Component {
               <Field
                 name="description"
                 type="text"
-                rows={3}
                 component={TextArea}
+                rows={3}
                 placeholder="Tell us about your event"
               />
-              <Header sub color="teal" content="Event Location Details" />
+              <Header sub color="teal" content="Event Location details" />
               <Field
                 name="city"
                 type="text"
                 component={PlaceInput}
                 options={{ types: ["(cities)"] }}
-                placeholder="Event City"
+                placeholder="Event city"
                 onSelect={this.handleCitySelect}
               />
               {this.state.scriptLoaded && (
                 <Field
                   name="venue"
                   type="text"
+                  component={PlaceInput}
                   options={{
                     location: new google.maps.LatLng(this.state.cityLatLng),
                     radius: 1000,
                     types: ["establishment"]
                   }}
-                  component={PlaceInput}
-                  placeholder="Event Venue"
+                  placeholder="Event venue"
                   onSelect={this.handleVenueSelect}
                 />
               )}
@@ -178,7 +177,7 @@ class EventForm extends Component {
                 dateFormat="YYYY-MM-DD HH:mm"
                 timeFormat="HH:mm"
                 showTimeSelect
-                placeholder="Date and Time of event"
+                placeholder="Date and time of event"
               />
               <Button
                 disabled={invalid || submitting || pristine}
@@ -187,7 +186,7 @@ class EventForm extends Component {
               >
                 Submit
               </Button>
-              <Button type="button" onClick={this.props.history.goBack}>
+              <Button onClick={this.props.history.goBack} type="button">
                 Cancel
               </Button>
             </Form>
@@ -197,6 +196,7 @@ class EventForm extends Component {
     );
   }
 }
+
 export default connect(
   mapState,
   actions

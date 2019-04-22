@@ -60,7 +60,4 @@ class EventDetailedInfo extends Component {
   }
 }
 
-
-
-
 export default EventDetailedInfo
