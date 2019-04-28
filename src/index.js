@@ -41,6 +41,10 @@ if (module.hot) {
     setTimeout(render);
   });
 }
+store.firebaseAuthIsReady.then(()=>{
+  render();
+}
+)
 
 render();
 
